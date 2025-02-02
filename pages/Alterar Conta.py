@@ -1,5 +1,6 @@
 import streamlit as st 
-from controllers.controllers import *
+from controllers.acessory_controlers.acessory_controllers import *
+from controllers.user_controllers.user_controllers import *
 
 try:
     st.subheader(f'Olá, {st.session_state.selected_option}')

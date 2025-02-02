@@ -1,5 +1,6 @@
 
-from controllers.controllers import *
+from controllers.acessory_controlers.acessory_controllers import *
+from controllers.user_controllers.user_controllers import *
 
 st.markdown("""
     <style>
@@ -37,6 +38,7 @@ with tab2:
         novo = st.container(border=True)
         novo.title("Seja Bem vindo")
         novo.subheader("Crie aqui seu usuário")
+        novo.divider()
         nome_novo = novo.text_input('Novo Nome',placeholder='Insira um usuário').strip()
         senha_nova = novo.text_input('Nova Senha',type='password',placeholder='Insira uma nova Senha').strip()
         botao_novo = novo.button('Criar Conta')

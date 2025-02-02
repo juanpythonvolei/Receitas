@@ -1,4 +1,4 @@
-from controllers.controllers import *
+from controllers.acessory_controlers.acessory_controllers import *
 
 
 def file(pergunta,file):

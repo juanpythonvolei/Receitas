@@ -1,6 +1,7 @@
 
-from controllers.controllers import *
+from controllers.acessory_controlers.acessory_controllers import *
 import datetime
+from controllers.receitas_controllers.receitas_controllers import *
 
 try:
     st.subheader(f'Olá, {st.session_state.selected_option}')
