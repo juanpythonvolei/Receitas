@@ -29,8 +29,8 @@ def audio(content):
     response = chat.send_message(f'Por favor, Faça uma correta correção e organização do segunite texto: {texto}. Por favor, retorne apenas o texto como resposta') 
     return response.text
 
-def chat_message(message):
-    receitas = session.query(Receitas).all()
+def chat_message(message,user):
+    receitas = session.query(Receitas).filter(usuario=user).all()
     final = 'Receitas Anotadas:\n'
     for receita in receitas:
         final += f'Receita:\n{receita.nome}\n {receita.infos}\n {receita.tipo}\n '
