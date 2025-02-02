@@ -7,6 +7,7 @@ import os
 # Cria a engine para PostgreSQL
 
 db = os.environ.get('DATABASE_PUBLIC_URL')
+
 engine = create_engine(f'{db}', echo=True)
 
 # Define a base declarativa

@@ -8,8 +8,8 @@ import os
 from docx import Document
 import pandas as pd
 import openpyxl
-
-
+from controllers.serializer import *
+from io import BytesIO
 key = st.secrets['api']
 genai.configure(api_key=key)
 model = genai.GenerativeModel('gemini-1.5-flash') 
@@ -18,7 +18,7 @@ def delete_user(nome):
     usuario = session.query(Usuarios).filter_by(nome=nome).first()
     session.delete(usuario)
     session.commit()
-    st.rerun()
+    st.switch_page("Início.py")
 
 def update_user(nome,senha):
     usuario = session.query(Usuarios).filter_by(nome=nome).first()
@@ -118,3 +118,36 @@ def warning(id):
   if str(st.text_input(placeholder='Digite "sim" para confirmar',label='',value='')).casefold().strip() == 'sim':
         delete_receita(id,st.session_state.selected_option)
         return st.success('Receita descartada com sucesso!')
+  
+@st.dialog('Deseja realizar essa ação?')
+def warning_delete(user):
+  if str(st.text_input(placeholder='Digite "sim" para confirmar',label='',value='')).casefold().strip() == 'sim':
+        delete_user(user)
+        return st.success('Receita descartada com sucesso!')
+  
+
+@st.cache_data
+def convert_df_to_excel(df):
+            output = BytesIO()
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                df.to_excel(writer, index=False, sheet_name='Sheet1')
+            processed_data = output.getvalue()
+            return processed_data 
+
+def donwload(user,tipo):
+    dataframes = []
+    if session.query(Usuarios).filter_by(nome=user):
+        Dados = session.query(Receitas).filter_by(usuario=user).all()
+        for i,dado in enumerate(Dados):
+            schema = ReceitaSchema(many=False)
+            dict_dado = schema.dump(dado)
+            dataframes.append(pd.DataFrame(dict_dado,index=[i]))
+    tabela_final = pd.concat(dataframes)
+    if str(tipo) == 'xlsx':
+        return convert_df_to_excel(tabela_final)
+    elif str(tipo) == 'csv':
+         return tabela_final.to_csv(index=False)
+    else:
+         return tabela_final.to_string(index=False)
+         
+    

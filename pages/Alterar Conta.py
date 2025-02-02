@@ -28,16 +28,23 @@ with tab1:
       else:
           Modicicacao.error('Preencha todos os campos')
   if botao_apagar:
-      status = Modicicacao.status('Processando...')
-      with status:
-          delete_user(st.session_state.selected_option)
-          status.update('Conta Apagada')
-      st.switch_page('Início.py')
+        warning_delete(user=st.session_state.selected_option)
+
 with tab2:
   Estatisticas = st.container(border=True)
   Estatisticas.title('Estatísticas')
   Estatisticas.divider()
   col1,col2,col3,col4 = Estatisticas.columns(4)
+  if Estatisticas.toggle("Baixar minhas receitas"):
+    tipo = Estatisticas.selectbox(label='Escolha o formato do arquivo',options=['xlsx','csv','outro'],index=None)
+    if tipo:
+        if tipo == 'xlsx':
+           mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        elif tipo == 'csv':
+           mime = 'text/csv'
+        else:
+           mime = 'text/plain'
+        donwload_button = Estatisticas.download_button(label='Baixar minhas receitas',data=donwload(user=st.session_state.selected_option,tipo=tipo),file_name=f'Receitas_{st.session_state.selected_option}.{tipo}',mime=mime)
   with col1:
     Estatisticas.subheader('Receitas Adicionadas')
     Estatisticas.metric(label='Total Receitass',value=len(session.query(Receitas).filter_by(usuario=st.session_state.selected_option).all()))
