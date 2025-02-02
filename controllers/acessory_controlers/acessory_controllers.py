@@ -30,7 +30,7 @@ def audio(content):
     return response.text
 
 def chat_message(message,user):
-    receitas = session.query(Receitas).filter(usuario=user).all()
+    receitas = session.query(Receitas).filter_by(usuario=user).all()
     final = 'Receitas Anotadas:\n'
     for receita in receitas:
         final += f'Receita:\n{receita.nome}\n {receita.infos}\n {receita.tipo}\n '
