@@ -20,7 +20,7 @@ if pergunta:
   humano.write(pergunta)
   status = Cozinheiro.status('Processando...')
   with status:
-    resposta = chat_message(pergunta)
+    resposta = chat_message(pergunta,st.session_state.selected_option)
     arquivo_audio = create_audio(resposta)
     status.update(label='Finalizado!')
   robo = st.chat_message('assistant')
